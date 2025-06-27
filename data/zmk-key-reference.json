@@ -1,0 +1,259 @@
+{
+  "behaviors": [
+    {
+      "name": "&kp",
+      "description": "Send a keycode when pressed.",
+      "params": ["keycode"]
+    },
+    {
+      "name": "&mt",
+      "description": "Sends a different key press depending on whether a key is held or tapped. (Mod Tap)",
+      "params": ["modifier", "keycode"]
+    },
+    {
+      "name": "&lt",
+      "description": "Enables a layer when a key is held, and outputs a key press when the key is only tapped for a short time. (Layer Tap)",
+      "params": ["layer", "keycode"]
+    },
+    {
+      "name": "&mo",
+      "description": "Enables a layer while a key is pressed. (Momentary Layer)",
+      "params": ["layer"]
+    },
+    {
+      "name": "&to",
+      "description": "Enables a layer and disables all other layers except the default layer.",
+      "params": ["layer"]
+    },
+    {
+      "name": "&tog",
+      "description": "Enables a layer until the layer is manually disabled. (Toggle Layer)",
+      "params": ["layer"]
+    },
+    {
+      "name": "&sl",
+      "description": "Activates a layer until another key is pressed, then deactivates it. (Sticky Layer)",
+      "params": ["layer"]
+    },
+    {
+      "name": "&sk",
+      "description": "Stays pressed until another key is pressed, then is released. (Sticky Key)",
+      "params": ["modifier"]
+    },
+    {
+      "name": "&bt",
+      "description": "Bluetooth control.",
+      "params": ["bt_command"]
+    },
+    {
+      "name": "&rgb_ug",
+      "description": "RGB Underglow control.",
+      "params": ["rgb_command"]
+    },
+    {
+      "name": "&out",
+      "description": "Output selection (USB/BLE).",
+      "params": ["output_command"]
+    },
+    {
+        "name": "&trans",
+        "description": "Transparent. Passes the key press down to the next active layer.",
+        "params": []
+    },
+    {
+        "name": "&none",
+        "description": "Disables a key. No keycode will be sent.",
+        "params": []
+    }
+  ],
+  "keycodes": {
+    "Letters": [
+      { "name": "A", "description": "a and A" },
+      { "name": "B", "description": "b and B" },
+      { "name": "C", "description": "c and C" },
+      { "name": "D", "description": "d and D" },
+      { "name": "E", "description": "e and E" },
+      { "name": "F", "description": "f and F" },
+      { "name": "G", "description": "g and G" },
+      { "name": "H", "description": "h and H" },
+      { "name": "I", "description": "i and I" },
+      { "name": "J", "description": "j and J" },
+      { "name": "K", "description": "k and K" },
+      { "name": "L", "description": "l and L" },
+      { "name": "M", "description": "m and M" },
+      { "name": "N", "description": "n and N" },
+      { "name": "O", "description": "o and O" },
+      { "name": "P", "description": "p and P" },
+      { "name": "Q", "description": "q and Q" },
+      { "name": "R", "description": "r and R" },
+      { "name": "S", "description": "s and S" },
+      { "name": "T", "description": "t and T" },
+      { "name": "U", "description": "u and U" },
+      { "name": "V", "description": "v and V" },
+      { "name": "W", "description": "w and W" },
+      { "name": "X", "description": "x and X" },
+      { "name": "Y", "description": "y and Y" },
+      { "name": "Z", "description": "z and Z" }
+    ],
+    "Numbers": [
+      { "name": "N1", "description": "1 and ! (Exclamation)" },
+      { "name": "N2", "description": "2 and @ (At Sign)" },
+      { "name": "N3", "description": "3 and # (Hash / Pound)" },
+      { "name": "N4", "description": "4 and $ (Dollar)" },
+      { "name": "N5", "description": "5 and % (Percent)" },
+      { "name": "N6", "description": "6 and ^ (Caret)" },
+      { "name": "N7", "description": "7 and & (Ampersand)" },
+      { "name": "N8", "description": "8 and * (Asterisk / Star)" },
+      { "name": "N9", "description": "9 and ( (Left Parenthesis)" },
+      { "name": "N0", "description": "0 and ) (Right Parenthesis)" }
+    ],
+    "Modifiers": [
+        { "name": "LSHIFT", "description": "Left Shift" },
+        { "name": "RSHIFT", "description": "Right Shift" },
+        { "name": "LCTRL", "description": "Left Control" },
+        { "name": "RCTRL", "description": "Right Control" },
+        { "name": "LALT", "description": "Left Alt" },
+        { "name": "RALT", "description": "Right Alt" },
+        { "name": "LGUI", "description": "Left GUI (Windows / Command / Meta)" },
+        { "name": "RGUI", "description": "Right GUI (Windows / Command / Meta)" }
+    ],
+    "Function Keys": [
+        { "name": "F1", "description": "F1" },
+        { "name": "F2", "description": "F2" },
+        { "name": "F3", "description": "F3" },
+        { "name": "F4", "description": "F4" },
+        { "name": "F5", "description": "F5" },
+        { "name": "F6", "description": "F6" },
+        { "name": "F7", "description": "F7" },
+        { "name": "F8", "description": "F8" },
+        { "name": "F9", "description": "F9" },
+        { "name": "F10", "description": "F10" },
+        { "name": "F11", "description": "F11" },
+        { "name": "F12", "description": "F12" },
+        { "name": "F13", "description": "F13" },
+        { "name": "F14", "description": "F14" },
+        { "name": "F15", "description": "F15" },
+        { "name": "F16", "description": "F16" },
+        { "name": "F17", "description": "F17" },
+        { "name": "F18", "description": "F18" },
+        { "name": "F19", "description": "F19" },
+        { "name": "F20", "description": "F20" },
+        { "name": "F21", "description": "F21" },
+        { "name": "F22", "description": "F22" },
+        { "name": "F23", "description": "F23" },
+        { "name": "F24", "description": "F24" }
+    ],
+    "Symbols & Punctuation": [
+      { "name": "EQUAL", "description": "= (Equal) and + (Plus)" },
+      { "name": "MINUS", "description": "- (Minus) and _ (Underscore)" },
+      { "name": "FSLH", "description": "/ (Forward Slash) and ? (Question Mark)" },
+      { "name": "BSLH", "description": "\\ (Backslash) and | (Pipe)" },
+      { "name": "SEMI", "description": "; (Semicolon) and : (Colon)" },
+      { "name": "SQT", "description": "' (Apostrophe) and \" (Quote)" },
+      { "name": "COMMA", "description": ", (Comma) and < (Less Than)" },
+      { "name": "DOT", "description": ". (Period) and > (Greater Than)" },
+      { "name": "LBKT", "description": "[ (Left Bracket) and { (Left Brace)" },
+      { "name": "RBKT", "description": "] (Right Bracket) and } (Right Brace)" },
+      { "name": "GRAVE", "description": "` (Grave Accent) and ~ (Tilde)" },
+      { "name": "NUHS", "description": "Non-US # and ~" },
+      { "name": "NUBS", "description": "Non-US \\ and |" }
+    ],
+    "Control & Whitespace": [
+        { "name": "ESC", "description": "Escape" },
+        { "name": "RET", "description": "Return (Enter)" },
+        { "name": "SPACE", "description": "Space" },
+        { "name": "TAB", "description": "Tab" },
+        { "name": "BSPC", "description": "Backspace" },
+        { "name": "DEL", "description": "Delete" },
+        { "name": "INS", "description": "Insert" }
+    ],
+    "Navigation": [
+        { "name": "HOME", "description": "Home" },
+        { "name": "END", "description": "End" },
+        { "name": "PG_UP", "description": "Page Up" },
+        { "name": "PG_DN", "description": "Page Down" },
+        { "name": "UP", "description": "Up Arrow" },
+        { "name": "DOWN", "description": "Down Arrow" },
+        { "name": "LEFT", "description": "Left Arrow" },
+        { "name": "RIGHT", "description": "Right Arrow" },
+        { "name": "K_APP", "description": "Application (Context Menu)" }
+    ],
+    "Locks": [
+        { "name": "CAPS", "description": "Caps Lock" },
+        { "name": "SLCK", "description": "Scroll Lock" },
+        { "name": "KP_NUM", "description": "Num Lock" }
+    ],
+    "Keypad": [
+        { "name": "KP_SLASH", "description": "Keypad / (Divide)" },
+        { "name": "KP_ASTERISK", "description": "Keypad * (Multiply)" },
+        { "name": "KP_MINUS", "description": "Keypad - (Subtract)" },
+        { "name": "KP_PLUS", "description": "Keypad + (Add)" },
+        { "name": "KP_ENTER", "description": "Keypad Enter" },
+        { "name": "KP_N1", "description": "Keypad 1" },
+        { "name": "KP_N2", "description": "Keypad 2" },
+        { "name": "KP_N3", "description": "Keypad 3" },
+        { "name": "KP_N4", "description": "Keypad 4" },
+        { "name": "KP_N5", "description": "Keypad 5" },
+        { "name": "KP_N6", "description": "Keypad 6" },
+        { "name": "KP_N7", "description": "Keypad 7" },
+        { "name": "KP_N8", "description": "Keypad 8" },
+        { "name": "KP_N9", "description": "Keypad 9" },
+        { "name": "KP_N0", "description": "Keypad 0" },
+        { "name": "KP_DOT", "description": "Keypad ." }
+    ],
+    "Media": [
+        { "name": "C_VOL_UP", "description": "Volume Up" },
+        { "name": "C_VOL_DN", "description": "Volume Down" },
+        { "name": "C_MUTE", "description": "Mute" },
+        { "name": "C_PP", "description": "Play/Pause" },
+        { "name": "C_NEXT", "description": "Next Track" },
+        { "name": "C_PREV", "description": "Previous Track" },
+        { "name": "C_STOP", "description": "Stop" },
+        { "name": "C_REC", "description": "Record" },
+        { "name": "C_FF", "description": "Fast Forward" },
+        { "name": "C_RW", "description": "Rewind" },
+        { "name": "C_EJECT", "description": "Eject" },
+        { "name": "C_BRI_INC", "description": "Increase Brightness" },
+        { "name": "C_BRI_DEC", "description": "Decrease Brightness" }
+    ],
+    "System": [
+        { "name": "PSCRN", "description": "Print Screen" },
+        { "name": "PAUSE_BREAK", "description": "Pause/Break" },
+        { "name": "C_PWR", "description": "System Power Down" },
+        { "name": "C_SLEEP", "description": "System Sleep" },
+        { "name": "C_AL_LOCK", "description": "Lock Workstation" },
+        { "name": "K_UNDO", "description": "Undo" },
+        { "name": "K_REDO", "description": "Redo" },
+        { "name": "K_COPY", "description": "Copy" },
+        { "name": "K_PASTE", "description": "Paste" },
+        { "name": "K_CUT", "description": "Cut" }
+    ]
+  },
+  "parameters": {
+    "bt_command": [
+      { "name": "BT_CLR", "description": "Clear all bonded devices" },
+      { "name": "BT_NXT", "description": "Switch to next profile" },
+      { "name": "BT_PRV", "description": "Switch to previous profile" },
+      { "name": "BT_SEL 0", "description": "Switch to profile 0" },
+      { "name": "BT_SEL 1", "description": "Switch to profile 1" },
+      { "name": "BT_SEL 2", "description": "Switch to profile 2" },
+      { "name": "BT_SEL 3", "description": "Switch to profile 3" },
+      { "name": "BT_SEL 4", "description": "Switch to profile 4" }
+    ],
+    "rgb_command": [
+      { "name": "RGB_TOG", "description": "Toggle RGB underglow on/off" },
+      { "name": "RGB_EFF", "description": "Cycle forward through effects" },
+      { "name": "RGB_EFR", "description": "Cycle backward through effects" },
+      { "name": "RGB_BRI", "description": "Increase brightness" },
+      { "name": "RGB_BRD", "description": "Decrease brightness" },
+      { "name": "RGB_HUI", "description": "Increase hue" },
+      { "name": "RGB_HUD", "description": "Decrease hue" },
+      { "name": "RGB_SAI", "description": "Increase saturation" },
+      { "name": "RGB_SAD", "description": "Decrease saturation" }
+    ],
+    "output_command": [
+      { "name": "OUT_USB", "description": "Set output to USB" },
+      { "name": "OUT_BLE", "description": "Set output to Bluetooth" }
+    ]
+  }
+} 
