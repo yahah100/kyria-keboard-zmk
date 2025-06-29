@@ -22,9 +22,7 @@ const KEY_UNIT_SIZE = 55; // size of a 1u key in pixels
 
 // Convert the keyboard structure to a flat array for easier access
 const flatBindings = computed(() => {
-  let array = keyboardToFlatArray(props.bindings);
-  console.log(array);
-  return array;
+  return keyboardToFlatArray(props.bindings);
 });
 
 const getKeyLabel = (key: KeyType): string => {
