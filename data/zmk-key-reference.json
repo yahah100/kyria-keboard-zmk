@@ -21,6 +21,16 @@
       "params": ["layer"]
     },
     {
+      "name": "&hml",
+      "description": "Enables a layer when a key is held, and outputs a key press when the key is only tapped for a short time. (Layer Tap)",
+      "params": ["layer", "keycode"]
+    },
+    {
+      "name": "&hmr",
+      "description": "Enables a layer when a key is held, and outputs a key press when the key is only tapped for a short time. (Layer Tap)",
+      "params": ["layer", "keycode"]
+    },
+    {
       "name": "&to",
       "description": "Enables a layer and disables all other layers except the default layer.",
       "params": ["layer"]
