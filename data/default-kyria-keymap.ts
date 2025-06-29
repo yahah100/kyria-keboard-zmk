@@ -64,14 +64,14 @@ export const defaultKeymap = `
             label = "DEFAULT";
             // ---------------------------------------------------------------------------------------------------------------------------------
             // |  ESC  |  Q  |  W  |  E   |  R   |  T   |                                          |  Y   |  U    |  I    |  O   |   P   |   \\  |
-            // |  TAB  |  A  |  S  |  D   |  F   |  G   |                                          |  H   |  J    |  K    |  L   |   ;   |   '  |
+            // |   TAB |  A  |  S  |  D   |  F   |  G    |                                          |  H   |  J    |  K    |  L   |   ;   |   \`  |
             // | SHIFT |  Z  |  X  |  C   |  V   |  B   |   SHIFT  |  NUMPAD |  | FUNCTION | SHIFT   |  N   |  M    |  ,    |  .   |   /   | CTRL |
             //                     | CTRL | DEL  | GUI  |  SPACE | NAV     |  |   RET    |  SPACE  | DEL  | BSPC  | R-ALT |
             bindings = <
             &kp ESC   &kp Q &kp W &kp E &kp R &kp T                                                  &kp Y &kp U  &kp I     &kp O   &kp P    &kp BSLH
-            &hml LALT A &hml LGUI S &hml LCTRL D &hml LSHFT F &kp G                                    &kp H &hmr RSHFT J &hmr RCTRL K &hmr RGUI L &hmr RALT SEMI &kp GRAVE
+            &kp TAB &hml LALT A &hml LGUI S &hml LCTRL D &hml LSHFT F &kp G                                    &kp H &hmr RSHFT J &hmr RCTRL K &hmr RGUI L &hmr RALT SEMI &kp GRAVE
             &kp LSHFT &kp Z &kp X &kp C &kp V &kp B &kp LSHFT &mo NUMPAD            &mo FUNCTION &kp LSHFT &kp N &kp M  &kp COMMA &kp DOT &kp FSLH &kp RCTRL
-                                  &kp LCTRL &kp DEL &kp LGUI &lt NAV SPACE       &lt FUNCTION RET &kp SPACE &kp BSPC &kp DEL &kp RALT
+                                  &kp LCTRL &kp DEL &kp LGUI &kp SPACE &kp NAV        &kp RET &kp SPACE &kp BSPC &kp DEL &kp RALT
             >;
 
         };

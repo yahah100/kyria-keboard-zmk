@@ -1,11 +1,12 @@
 import { ref, readonly } from 'vue';
 import { defaultKeymap } from '~/data/default-kyria-keymap';
 import { kyriaLayout } from '~/data/kyria-layout';
+import { KeyboardBuilder, type Keyboard, type Key, keyboardToFlatArray } from './keyboard';
 
 interface KeymapLayer {
   name: string;
   label: string;
-  bindings: string[];
+  bindings: Keyboard;
 }
 
 interface Keymap {
@@ -18,13 +19,46 @@ const keymap = ref<Keymap>({
   originalContent: defaultKeymap,
 });
 
-function parseKeymap(content: string) {
+function parseBindingsString(bindingsString: string): string[] {
+  return bindingsString
+    .replace(/&/g, '\n&')
+    .split('\n')
+    .map((b: string) => b.trim().replace(/\\/g, ''))
+    .filter((b: string) => b && !b.startsWith('//'))
+    .map((b: string) => b.replace(/^&/, '').trim());
+}
+
+function mapBindingsToKeyboard(bindings: string[]): Keyboard {
+  const keys: Key[] = [];
+  for (const binding of bindings) {
+    const parts: string[] = binding.split(' ');
+    const functionKey: string = parts[0];
+    const keycode1: string = parts[1];
+    const keycode2: string = parts[2] || '';
+
+    const key: Key = parts.length > 2 ? {
+      function: functionKey,
+      keycode1: keycode1,
+      keycode2: keycode2
+    } : {
+      function: functionKey,
+      keycode: keycode1 || ''
+    };
+    keys.push(key);
+  }
+  const keyboard = new KeyboardBuilder().fillFromArray(keys).build();
+  console.log(keyboard);
+  return keyboard;
+}
+
+function parseKeymap(content: string): KeymapLayer[] {
   const layerRegex = /(\w+)_layer\s*{((?:[^{}]*|\{[^{}]*\})*?)}/gs;
   const labelRegex = /label\s*=\s*"([^"]+)"/;
   const bindingsRegex = /bindings\s*=\s*<([^>]+)>/;
 
   const layers: KeymapLayer[] = [];
   let match;
+  
   while ((match = layerRegex.exec(content)) !== null) {
     const layerName = `${match[1]}_layer`;
     const layerContent = match[2];
@@ -34,18 +68,18 @@ function parseKeymap(content: string) {
 
     const bindingsMatch = layerContent.match(bindingsRegex);
     if (bindingsMatch) {
-      const bindings = bindingsMatch[1]
-        .replace(/&/g, '\n&')
-        .split('\n')
-        .map(b => b.trim().replace(/\\/g, ''))
-        .filter(b => b && !b.startsWith('//'))
-        .map(b => b.replace(/^&/, '').trim());
-      
-      layers.push({ name: layerName, label, bindings });
+      const bindingsArray = parseBindingsString(bindingsMatch[1]);
+      const keyboard = mapBindingsToKeyboard(bindingsArray);
+      layers.push({ 
+        name: layerName, 
+        label, 
+        bindings: keyboard 
+      });
     }
   }
+  
   return layers;
-};
+}
 
 function loadKeymap(content: string) {
   keymap.value.originalContent = content;
@@ -53,11 +87,10 @@ function loadKeymap(content: string) {
 }
 
 function addLayer() {
-  const numKeys = kyriaLayout.length;
   const newLayer: KeymapLayer = {
     name: `layer_${keymap.value.layers.length}`,
     label: `Layer ${keymap.value.layers.length}`,
-    bindings: Array(numKeys).fill('trans'),
+    bindings: new KeyboardBuilder().createEmptyKeyboard(),
   };
   keymap.value.layers.push(newLayer);
 }
@@ -73,11 +106,20 @@ const generateKeymapContent = (): string => {
     const layerNameForRegex = layer.name.replace(/_layer$/, '');
     const regex = new RegExp(`(${layerNameForRegex}_layer\\s*{[^}]*bindings\\s*=\\s*<)[^>]+(>)`, 's');
     
-    const bindingsWithAmpersand = layer.bindings.map(b => `&${b}`);
+    // Convert keyboard structure to flat array, then to bindings strings
+    const flatKeys = keyboardToFlatArray(layer.bindings);
+    const bindingsWithAmpersand = flatKeys.map((key: Key) => {
+      if ('keycode1' in key && 'keycode2' in key) {
+        // TabKey type
+        return `&${key.function} ${key.keycode1} ${key.keycode2}`;
+      } else {
+        // DefaultKey type
+        return `&${key.function} ${key.keycode || ''}`.trim();
+      }
+    });
+    
     let newBindingsBlock = '';
     
-    // This logic seems specific to a certain layout, might need adjustment.
-    // For now, just join them. A better way would be to format it nicely.
     newBindingsBlock = '\n            ' + bindingsWithAmpersand.join(' ');
 
     newBindingsBlock += '\n        ';
@@ -85,8 +127,6 @@ const generateKeymapContent = (): string => {
     if (regex.test(newContent)) {
       newContent = newContent.replace(regex, `$1${newBindingsBlock}$2`);
     } else {
-        // This is a new layer, it needs to be added to the file content.
-        // Let's find the `keymap {` block and insert it.
         const keymapRegex = /(keymap\s*{[^}]*)/s;
         const newLayerString = `
         ${layer.name} {
@@ -111,10 +151,28 @@ export const useKeymap = () => {
     loadKeymap,
     addLayer,
     generateKeymapContent,
-    updateKeyBinding: (layerIndex: number, keyIndex: number, binding: string) => {
-        if (keymap.value.layers[layerIndex] && keymap.value.layers[layerIndex].bindings[keyIndex] !== undefined) {
-            keymap.value.layers[layerIndex].bindings[keyIndex] = binding;
+    updateKeyBinding: (layerIndex: number, keyIndex: number, key: Key) => {
+        if (keymap.value.layers[layerIndex]) {
+            const builder = new KeyboardBuilder()
+                .fromKeyboard(keymap.value.layers[layerIndex].bindings)
+                .setKeyAtIndex(keyIndex, key);
+            keymap.value.layers[layerIndex].bindings = builder.build();
         }
-    }
+    },
+    // Helper function to get a key at a specific index from a layer
+    getKeyAtIndex: (layerIndex: number, keyIndex: number): Key | null => {
+        const layer = keymap.value.layers[layerIndex];
+        if (!layer) return null;
+        const builder = new KeyboardBuilder();
+        return builder.getKeyAtIndex(layer.bindings, keyIndex);
+    },
+    // Helper function to convert layer bindings to flat array
+    getLayerAsArray: (layerIndex: number): Key[] | null => {
+        const layer = keymap.value.layers[layerIndex];
+        if (!layer) return null;
+        return keyboardToFlatArray(layer.bindings);
+    },
+    // Helper to convert any bindings array to Keyboard structure
+    bindingsToKeyboard: mapBindingsToKeyboard
   };
 }; 

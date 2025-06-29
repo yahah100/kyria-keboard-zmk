@@ -1,46 +1,55 @@
 <template>
   <div class="keyboard">
     <div v-for="(key, index) in kyriaLayout" :key="index" class="key-wrapper" :style="getKeyStyle(key)" @click="$emit('keyClick', index)">
-      <Key :label="getKeyLabel(bindings[index])" />
+      <Key :label="getKeyLabel(flatBindings[index])" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import Key from './Key.vue';
 import { kyriaLayout } from '~/data/kyria-layout';
+import { keyboardToFlatArray, type Keyboard, type Key as KeyType } from '~/composables/keyboard';
 
-defineProps<{
-  bindings: readonly string[];
+const props = defineProps<{
+  bindings: Keyboard;
 }>();
 
 defineEmits(['keyClick']);
 
 const KEY_UNIT_SIZE = 55; // size of a 1u key in pixels
 
-const getKeyLabel = (binding: string): string => {
-  if (!binding) return '';
-  const parts = binding.split(' ');
-  const behavior = parts[0];
+// Convert the keyboard structure to a flat array for easier access
+const flatBindings = computed(() => {
+  let array = keyboardToFlatArray(props.bindings);
+  console.log(array);
+  return array;
+});
 
+const getKeyLabel = (key: KeyType): string => {
+  if (!key) return '';
+  
+  const behavior = key.function;
   switch (behavior) {
     case 'kp':
     case 'sk':
-      return parts[1] || '';
+      return ('keycode' in key) ? key.keycode : '';
     case 'mo':
     case 'to':
     case 'tg':
-      return parts.length > 1 ? `${behavior}(${parts[1]})` : behavior;
+      return ('keycode' in key) ? `${behavior}(${key.keycode})` : behavior;
     case 'lt':
-      return parts.length > 2 ? `${parts[1]}(${parts[2]})` : behavior;
+      return ('keycode1' in key && 'keycode2' in key) ? `${key.keycode1}(${key.keycode2})` : behavior;
     case 'mt':
     case 'hml':
     case 'hmr':
-      return parts.length > 2 ? parts[2] : (parts.length > 1 ? parts[1] : behavior); // Display tap key
+      // Display tap key for hold-tap behaviors
+      return ('keycode1' in key && 'keycode2' in key) ? `${key.keycode1}(${key.keycode2})` : behavior;
     case 'trans':
       return '▽'; // Transparent
     default:
-      return binding;
+      return ('keycode' in key) ? key.keycode : behavior;
   }
 };
 

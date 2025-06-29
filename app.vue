@@ -20,7 +20,7 @@
           <Keyboard
             :key="selectedLayerIndex"
             v-if="selectedLayer"
-            :bindings="selectedLayer.bindings"
+            :bindings="selectedLayer.bindings as KeyboardType"
             @key-click="openEditor"
           />
         </transition>
@@ -31,7 +31,7 @@
       :is-open="isEditorOpen"
       :layer-name="selectedLayer.label"
       :key-index="selectedKeyIndex"
-      :current-binding="selectedKeyBinding"
+      :current-binding="selectedKeyBindingString"
       :available-layers="keymap.layers.map(l => l.label)"
       @close="isEditorOpen = false"
       @update-binding="updateBinding"
@@ -45,8 +45,9 @@ import Keyboard from '~/components/Keyboard.vue';
 import KeyEditor from '~/components/KeyEditor.vue';
 import LayerManager from '~/components/LayerManager.vue';
 import { useKeymap } from '~/composables/useKeymap';
+import { type Key, type Keyboard as KeyboardType } from '~/composables/keyboard';
 
-const { keymap, loadKeymap, generateKeymapContent, updateKeyBinding } = useKeymap();
+const { keymap, loadKeymap, generateKeymapContent, updateKeyBinding, getKeyAtIndex } = useKeymap();
 
 const selectedLayerIndex = ref(0);
 const isEditorOpen = ref(false);
@@ -58,7 +59,21 @@ const selectedLayer = computed(() => {
 });
 
 const selectedKeyBinding = computed(() => {
-  return selectedLayer.value?.bindings[selectedKeyIndex.value] || '';
+  return getKeyAtIndex(selectedLayerIndex.value, selectedKeyIndex.value);
+});
+
+// Convert the Key object back to a string format for the editor
+const selectedKeyBindingString = computed(() => {
+  const key = selectedKeyBinding.value;
+  if (!key) return '';
+  
+  if ('keycode1' in key && 'keycode2' in key) {
+    // TabKey type
+    return `${key.function} ${key.keycode1} ${key.keycode2}`;
+  } else {
+    // DefaultKey type
+    return `${key.function} ${key.keycode || ''}`.trim();
+  }
 });
 
 const handleImportClick = () => {
@@ -85,7 +100,22 @@ const openEditor = (keyIndex: number) => {
 };
 
 const updateBinding = (payload: { keyIndex: number; newBinding: string }) => {
-  updateKeyBinding(selectedLayerIndex.value, payload.keyIndex, payload.newBinding);
+  // Parse the binding string back into a Key object
+  const parts = payload.newBinding.trim().split(' ');
+  const functionKey = parts[0];
+  const keycode1 = parts[1] || '';
+  const keycode2 = parts[2] || '';
+
+  const key: Key = parts.length > 2 ? {
+    function: functionKey,
+    keycode1: keycode1,
+    keycode2: keycode2
+  } : {
+    function: functionKey,
+    keycode: keycode1
+  };
+
+  updateKeyBinding(selectedLayerIndex.value, payload.keyIndex, key);
 };
 
 const downloadKeymap = () => {
