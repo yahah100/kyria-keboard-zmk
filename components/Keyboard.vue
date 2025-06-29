@@ -43,7 +43,7 @@ const getKeyLabel = (key: KeyType): string => {
     case 'hml':
     case 'hmr':
       // Display tap key for hold-tap behaviors
-      return ('keycode1' in key && 'keycode2' in key) ? `${key.keycode1}(${key.keycode2})` : behavior;
+      return ('keycode1' in key && 'keycode2' in key) ? `${key.keycode2}(${key.keycode1})` : behavior;
     case 'trans':
       return '▽'; // Transparent
     default:
